@@ -36,6 +36,9 @@ RUN if [ ${CHANGE_SOURCE} = true ]; then \
 # always run apt update when start and after add new source list, then clean up at end.
 RUN set -xe; \
     apt-get update -yqq && \
+    apt-get install -y libmcrypt-dev && \
+    pecl install mcrypt-1.0.1 && \
+    docker-php-ext-enable mcrypt && \
     pecl channel-update pecl.php.net && \
     apt-get install -yqq \
       apt-utils \
