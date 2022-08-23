@@ -49,6 +49,10 @@ ENV PGID ${PGID}
 # always run apt update when start and after add new source list, then clean up at end.
 RUN set -xe; \
     apt-get update -yqq && \
+    apt-get install -y libmcrypt-dev && \
+    pecl install mcrypt-1.0.1 && \
+    echo "extension=mcrypt.so" >> /etc/php/${LARADOCK_PHP_VERSION}/mods-available/mcrypt.ini && \
+    ln -s /etc/php/${LARADOCK_PHP_VERSION}/mods-available/mcrypt.ini /etc/php/${LARADOCK_PHP_VERSION}/cli/conf.d/50-mcrypt.ini; \
     pecl channel-update pecl.php.net && \
     groupadd -g ${PGID} laradock && \
     useradd -l -u ${PUID} -g laradock -m laradock -G docker_env && \
